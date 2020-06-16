@@ -6,7 +6,7 @@ from model import QNetwork, DuelingQNetwork
 
 import torch
 import torch.nn.functional as F
-import torch.optim as optim
+import torch.optim as optim #optim package to define an Optimizer that will update the weights
 
 BUFFER_SIZE = int(1e5)  # replay buffer size
 BATCH_SIZE = 64         # minibatch size
@@ -37,6 +37,9 @@ class Agent():
         self.qnetwork_local = DuelingQNetwork(state_size, action_size, seed).to(device)
         self.qnetwork_target = DuelingQNetwork(state_size, action_size, seed).to(device)
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)
+        # Use the optim package to define an Optimizer that will update the weights of
+        # the model for us. Here we will use Adam; the optim package contains many other
+        # optimization algorithms.
 
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, seed)
@@ -65,8 +68,10 @@ class Agent():
         """
         state = torch.from_numpy(state).float().unsqueeze(0).to(device)
         self.qnetwork_local.eval()
-        with torch.no_grad():
+        with torch.no_grad(): 
             action_values = self.qnetwork_local(state)
+            #Disabling gradient calculation is useful for inference 
+        
         self.qnetwork_local.train()
 
         # Epsilon-greedy action selection
