@@ -12,6 +12,7 @@ class QNetwork(nn.Module):
             state_size (int): Dimension of each state
             action_size (int): Dimension of each action
             seed (int): Random seed
+            fc : fully conected layer
         """
         
         super(QNetwork, self).__init__()
@@ -21,12 +22,11 @@ class QNetwork(nn.Module):
         self.fc2 = nn.Linear(fc1_size, fc2_size)
         self.out = nn.Linear(fc2_size, action_size)
         
-        "*** YOUR CODE HERE ***"
-
+       
     def forward(self, state):
         """Build a network that maps state -> action values."""
         x = self.fc1(state)
-        x = F.relu(x)
+        x = F.relu(x) #ReLU activation func: filter the values <0 and for faster converging
         x = self.fc2(x)
         x = F.relu(x)
         action = self.out(x)
@@ -42,6 +42,7 @@ class DuelingQNetwork(nn.Module):
             state_size (int): Dimension of each state
             action_size (int): Dimension of each action
             seed (int): Random seed
+            fc : fully conected layer
         """
         
         super(DuelingQNetwork, self).__init__()
