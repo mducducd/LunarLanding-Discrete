@@ -72,5 +72,7 @@ class DuelingQNetwork(nn.Module):
         adv = F.relu(self.fc3_2(x))
         adv = self.fc4_2(adv)
         # Q(s,a) = V(s) + (A(s,a) - 1/|A| * sum A(s,a'))
+        # V(s) estimates the state value 
+        # A(s,a) estimates the advantage for each action
         action = val + adv - adv.mean(1).unsqueeze(1).expand(state.size(0), self.num_actions)
         return action
